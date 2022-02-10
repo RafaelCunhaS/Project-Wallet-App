@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   email: '',
 };
 
-const userResucer = (state = INITIAL_STATE, action) => {
+const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case USER_EMAIL:
     return { ...state, email: action.payload };
@@ -14,4 +14,4 @@ const userResucer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default userResucer;
+export default userReducer;
