@@ -1,7 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
-import { getCurrency } from '../actions';
+import { editLine, getCurrency } from '../actions';
+import ExpenseTable from './ExpenseTable';
+
+// const INITIAL_STATE = {
+//   value: '',
+//   description: '',
+//   currency: 'USD',
+//   method: 'Dinheiro',
+//   tag: 'Alimentação',
+//   currencyArray: [],
+//   isEditing: false,
+//   id: '0',
+// };
 
 class Form extends React.Component {
   constructor() {
@@ -13,6 +25,8 @@ class Form extends React.Component {
       method: 'Dinheiro',
       tag: 'Alimentação',
       currencyArray: [],
+      isEditing: false,
+      id: 0,
     };
   }
 
@@ -25,8 +39,7 @@ class Form extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = async (e) => {
-    e.preventDefault();
+  handleSubmit = async () => {
     const { getData } = this.props;
     const { value, description, currency, method, tag } = this.state;
     await getData({ value, description, currency, method, tag });
@@ -41,13 +54,24 @@ class Form extends React.Component {
       .catch((e) => console.error(e));
   }
 
+  handleEdit = ({ id, value, description, currency, method, tag }) => {
+    this.setState({ value, description, currency, method, tag, isEditing: true, id });
+  }
+
+  submitEdit = () => {
+    const { id, value, description, currency, method, tag } = this.state;
+    const { editItem } = this.props;
+    editItem(id, { id, value, description, currency, method, tag });
+    this.setState({ value: '', isEditing: false });
+  }
+
   render() {
     const {
       value,
-      description, currency, method, tag, currencyArray } = this.state;
+      description, currency, method, tag, currencyArray, isEditing } = this.state;
     return (
       <div>
-        <form onSubmit={ this.handleSubmit }>
+        <form>
           <label htmlFor="value">
             Valor:
             <input
@@ -112,8 +136,22 @@ class Form extends React.Component {
               data-testid="description-input"
             />
           </label>
-          <button type="submit">Adicionar despesa</button>
+          {isEditing ? (
+            <button
+              type="button"
+              onClick={ this.submitEdit }
+            >
+              Editar despesa
+            </button>)
+            : (
+              <button
+                type="button"
+                onClick={ this.handleSubmit }
+              >
+                Adicionar despesa
+              </button>)}
         </form>
+        <ExpenseTable handleEdit={ this.handleEdit } />
       </div>
     );
   }
@@ -125,10 +163,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getData: (payload) => dispatch(getCurrency(payload)),
+  editItem: (id, payload) => dispatch(editLine(id, payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
 
 Form.propTypes = {
   getData: propTypes.func.isRequired,
+  editItem: propTypes.func.isRequired,
 };

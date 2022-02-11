@@ -1,4 +1,4 @@
-import { ADD_EXPENSE, REMOVE_LINE } from '../actions';
+import { ADD_EXPENSE, EDIT_LINE, REMOVE_LINE } from '../actions';
 
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 const INITIAL_STATE = {
@@ -21,6 +21,11 @@ const walletReducer = (state = INITIAL_STATE, action) => {
     return { ...state,
       expenses: [...state.expenses.filter((obj) => obj.id !== action.payload)],
     };
+  case EDIT_LINE:
+    return { ...state,
+      expenses: [...state.expenses.map((obj) => (obj.id
+        === action.id ? { ...action.payload, exchangeRates: obj.exchangeRates }
+        : obj))] };
   default:
     return state;
   }

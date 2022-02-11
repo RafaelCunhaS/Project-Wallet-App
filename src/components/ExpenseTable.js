@@ -5,7 +5,7 @@ import { removeLine } from '../actions';
 
 class ExpenseTable extends React.Component {
   render() {
-    const { expenses, removeItem } = this.props;
+    const { expenses, removeItem, handleEdit } = this.props;
     return (
       <table>
         <thead>
@@ -22,28 +22,41 @@ class ExpenseTable extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {expenses.map((data) => (
-            <tr key={ data.id }>
-              <td>{data.description}</td>
-              <td>{data.tag}</td>
-              <td>{data.method}</td>
-              <td>{Number(data.value).toFixed(2)}</td>
-              <td>{data.exchangeRates[data.currency].name.split('/')[0]}</td>
-              <td>{Number(data.exchangeRates[data.currency].ask).toFixed(2)}</td>
-              <td>{(data.exchangeRates[data.currency].ask * data.value).toFixed(2)}</td>
-              <td>Real</td>
-              <td>
-                <button type="button" data-testid="edit-btn">Editar despesa</button>
-                <button
-                  type="button"
-                  data-testid="delete-btn"
-                  onClick={ () => removeItem(data.id) }
-                >
-                  X
-                </button>
-              </td>
-            </tr>
-          ))}
+          {expenses.map(({ id, description, tag, method,
+            value, currency, exchangeRates }) => (
+            (
+              <tr key={ id }>
+                <td>{description}</td>
+                <td>{tag}</td>
+                <td>{method}</td>
+                <td>{Number(value).toFixed(2)}</td>
+                <td>{exchangeRates[currency].name.split('/')[0]}</td>
+                <td>{Number(exchangeRates[currency].ask).toFixed(2)}</td>
+                <td>{(exchangeRates[currency].ask * value).toFixed(2)}</td>
+                <td>Real</td>
+                <td>
+                  <button
+                    type="button"
+                    data-testid="edit-btn"
+                    onClick={ () => handleEdit({ id,
+                      description,
+                      tag,
+                      method,
+                      value,
+                      currency }) }
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="delete-btn"
+                    onClick={ () => removeItem(id) }
+                  >
+                    X
+                  </button>
+                </td>
+              </tr>
+            )))}
         </tbody>
       </table>
     );
@@ -63,4 +76,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(ExpenseTable);
 ExpenseTable.propTypes = {
   expenses: propTypes.arrayOf(propTypes.object).isRequired,
   removeItem: propTypes.func.isRequired,
+  handleEdit: propTypes.func.isRequired,
 };
