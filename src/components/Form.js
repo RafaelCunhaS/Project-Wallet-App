@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
-import { editLine, getCurrency } from '../actions';
+import { editLine, fetchData, getExpense } from '../actions';
 import ExpenseTable from './ExpenseTable';
 
 // const INITIAL_STATE = {
@@ -24,14 +24,14 @@ class Form extends React.Component {
       currency: 'USD',
       method: 'Dinheiro',
       tag: 'Alimentação',
-      currencyArray: [],
       isEditing: false,
       id: 0,
     };
   }
 
-  componentDidMount() {
-    this.getCurrencys();
+  async componentDidMount() {
+    const { getData } = this.props;
+    await getData();
   }
 
   handleChange = ({ target }) => {
@@ -40,22 +40,17 @@ class Form extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { getData } = this.props;
+    const { addExpense } = this.props;
     const { value, description, currency, method, tag } = this.state;
-    await getData({ value, description, currency, method, tag });
+    await fetch('https://economia.awesomeapi.com.br/json/all')
+      .then((response) => response.json())
+      .then((data) => addExpense({ value, description, currency, method, tag }, data))
+      .catch((error) => error);
     this.setState({ value: '' });
   }
 
-  getCurrencys = () => {
-    fetch('https://economia.awesomeapi.com.br/json/all')
-      .then((response) => response.json())
-      .then((data) => this.setState({
-        currencyArray: Object.keys(data).filter((USDT) => USDT !== 'USDT') }))
-      .catch((e) => console.error(e));
-  }
-
-  handleEdit = ({ id, value, description, currency, method, tag }) => {
-    this.setState({ value, description, currency, method, tag, isEditing: true, id });
+  handleEdit = (values) => {
+    this.setState({ ...values, isEditing: true });
   }
 
   submitEdit = () => {
@@ -68,7 +63,8 @@ class Form extends React.Component {
   render() {
     const {
       value,
-      description, currency, method, tag, currencyArray, isEditing } = this.state;
+      description, currency, method, tag, isEditing } = this.state;
+    const { currencies } = this.props;
     return (
       <div>
         <form>
@@ -92,7 +88,8 @@ class Form extends React.Component {
               onChange={ this.handleChange }
               data-testid="currency-input"
             >
-              { currencyArray.map((curr) => <option key={ curr }>{curr}</option>) }
+              { currencies.filter((coin) => coin !== 'USDT')
+                .map((curr) => <option key={ curr }>{curr}</option>) }
             </select>
           </label>
           <label htmlFor="method">
@@ -159,11 +156,13 @@ class Form extends React.Component {
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
+  currencies: state.wallet.currencies,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getData: (payload) => dispatch(getCurrency(payload)),
+  getData: () => dispatch(fetchData()),
   editItem: (id, payload) => dispatch(editLine(id, payload)),
+  addExpense: (payload, exchangeRates) => dispatch(getExpense(payload, exchangeRates)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
@@ -171,4 +170,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Form);
 Form.propTypes = {
   getData: propTypes.func.isRequired,
   editItem: propTypes.func.isRequired,
+  addExpense: propTypes.func.isRequired,
+  currencies: propTypes.arrayOf(propTypes.string).isRequired,
 };
