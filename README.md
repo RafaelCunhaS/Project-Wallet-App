@@ -1,6 +1,6 @@
 ### Wallet App
 
-Front-end project made while I was studying at Trybe, a web development school.
+Front-end project made while studying at Trybe, a web development school.
 
 This project's a wallet that converts international currencies to the brazilian currency BRL(Real Basileiro) and shows detailed information to the user.
 
