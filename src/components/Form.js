@@ -57,7 +57,7 @@ class Form extends React.Component {
     const { currencies } = this.props;
     return (
       <div>
-        <form className={ isEditing ? "form-container editing" : "form-container"}>
+        <form className={ isEditing ? 'form-container editing' : 'form-container' }>
           <label htmlFor="value">
             Valor:
             <input
@@ -82,7 +82,7 @@ class Form extends React.Component {
                 .map((curr) => <option key={ curr }>{curr}</option>) }
             </select>
           </label>
-          <label htmlFor="method">
+          <label className="method" htmlFor="method">
             Método de pagamento:
             <select
               id="method"
