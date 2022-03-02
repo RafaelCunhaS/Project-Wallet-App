@@ -3,17 +3,7 @@ import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { editLine, fetchData, getExpense } from '../actions';
 import ExpenseTable from './ExpenseTable';
-
-// const INITIAL_STATE = {
-//   value: '',
-//   description: '',
-//   currency: 'USD',
-//   method: 'Dinheiro',
-//   tag: 'Alimentação',
-//   currencyArray: [],
-//   isEditing: false,
-//   id: '0',
-// };
+import './Form.css';
 
 class Form extends React.Component {
   constructor() {
@@ -67,7 +57,7 @@ class Form extends React.Component {
     const { currencies } = this.props;
     return (
       <div>
-        <form>
+        <form className={ isEditing ? "form-container editing" : "form-container"}>
           <label htmlFor="value">
             Valor:
             <input
@@ -76,7 +66,7 @@ class Form extends React.Component {
               name="value"
               value={ value }
               onChange={ this.handleChange }
-              data-testid="value-input"
+              className="form-info"
             />
           </label>
           <label htmlFor="currency">
@@ -86,7 +76,7 @@ class Form extends React.Component {
               name="currency"
               value={ currency }
               onChange={ this.handleChange }
-              data-testid="currency-input"
+              className="form-info"
             >
               { currencies.filter((coin) => coin !== 'USDT')
                 .map((curr) => <option key={ curr }>{curr}</option>) }
@@ -99,7 +89,7 @@ class Form extends React.Component {
               name="method"
               value={ method }
               onChange={ this.handleChange }
-              data-testid="method-input"
+              className="form-info"
             >
               <option>Dinheiro</option>
               <option>Cartão de crédito</option>
@@ -113,7 +103,7 @@ class Form extends React.Component {
               name="tag"
               value={ tag }
               onChange={ this.handleChange }
-              data-testid="tag-input"
+              className="form-info"
             >
               <option>Alimentação</option>
               <option>Lazer</option>
@@ -130,13 +120,15 @@ class Form extends React.Component {
               name="description"
               value={ description }
               onChange={ this.handleChange }
-              data-testid="description-input"
+              className="form-info"
             />
           </label>
           {isEditing ? (
             <button
               type="button"
               onClick={ this.submitEdit }
+              className="form-info form-btn"
+              disabled={ !value }
             >
               Editar despesa
             </button>)
@@ -144,11 +136,13 @@ class Form extends React.Component {
               <button
                 type="button"
                 onClick={ this.handleSubmit }
+                className="form-info form-btn"
+                disabled={ !value }
               >
                 Adicionar despesa
               </button>)}
         </form>
-        <ExpenseTable handleEdit={ this.handleEdit } />
+        <ExpenseTable handleEdit={ this.handleEdit } isEditing={ isEditing } />
       </div>
     );
   }

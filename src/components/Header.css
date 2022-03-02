@@ -1,0 +1,35 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 2rem;
+  font-size: 1.08rem;
+}
+
+@media only screen and (max-width: 500px) {
+  .header-container {
+    margin: 1rem 0.4rem;
+  }
+}
+
+.header-container img {
+  width: 4rem;
+}
+
+.header-info {
+  width: 30rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.header-info p {
+  margin: 12px 0;
+}
+
+@media only screen and (max-width: 700px) {
+  .header-info {
+    flex-direction: column;
+    max-width: fit-content;
+  }
+}
