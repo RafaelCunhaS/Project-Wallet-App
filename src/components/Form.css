@@ -8,6 +8,7 @@
   padding: 0.8rem 0;
 }
 
+
 .editing {
   background-color: #6464c0;
 }
@@ -58,4 +59,19 @@
   opacity: 0.6;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+@media only screen and (max-width: 500px) {
+  .form-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-info {
+    margin-bottom: 5px;
+  }
+
+  .form-btn {
+    max-width: 70%;
+  }
 }
