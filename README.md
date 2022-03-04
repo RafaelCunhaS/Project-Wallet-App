@@ -1,4 +1,4 @@
-### Wallet App
+## Wallet App
 
 Front-end project made while studying at Trybe, a web development school.
 
