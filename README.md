@@ -10,7 +10,7 @@ The project was made using __React__, __Redux__, __JavaScript__, __CSS__ and the
 
 With this project I was able to:
 
- - Create a _store_, _reducers_, _actions and _dispatchers_ from Redux in a React application;
+ - Create a _store_, _reducers_, _actions_ and _dispatchers_ from Redux in a React application;
  - Connect Redux to the React components;
  - Create asynchronous actions in the React application that makes use of Redux;
 
