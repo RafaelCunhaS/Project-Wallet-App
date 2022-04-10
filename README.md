@@ -6,7 +6,7 @@ This project's a wallet that converts international currencies to the brazilian 
 
 The project was made using __React__, __Redux__, __JavaScript__, __CSS__ and the API from 'https://docs.awesomeapi.com.br/api-de-moedas'.
 
-### Skills
+### Skills Developed
 
 With this project I was able to:
 
